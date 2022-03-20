@@ -1,15 +1,31 @@
 <script>
-    import Play from "../../static/start.png";
+    import { pomoTimeStore} from "../Stores/stores";
+    import { shortBreakTimeStore } from "../Stores/stores";
+    import { longBreakTimeStore } from "../Stores/stores";
+
+    let pomodoroTime
+    let shortBreak
+    let longBreak
+
+
+    // subscribe to time stores
+    pomoTimeStore.subscribe(time => {
+        pomodoroTime = time;
+    })
+
+    shortBreakTimeStore.subscribe(s_breakTime => {
+        shortBreak = s_breakTime;
+    })
+
+    longBreakTimeStore.subscribe(l_breakTime => {
+        longBreak = l_breakTime;
+    })
+
     // time calculations
     const minutesToSeconds = (minutes) => minutes * 60;
     const secondsToMinutes = (seconds) => Math.floor(seconds / 60);
     const padWithZeroes = (number) => number.toString().padStart(2, '0');
-    
-    const POMODORO_S = minutesToSeconds(25);
-    const LONG_BREAK_S = minutesToSeconds(20);
-    const SHORT_BREAK_S = minutesToSeconds(5);
   
-    let pomodoroTime = POMODORO_S;
     let completedPomodoros = 0;
     let interval;
 
@@ -35,18 +51,19 @@
         },1000);
     }
   
+    // Break times for completed pomodoro
     function completePomodoro(){
         clearInterval(interval);
         completedPomodoros++;
-        // TODO: update the current task with a completed pomodoro
         if (completedPomodoros === 4) {
-            rest(LONG_BREAK_S);
+            rest($longBreakTimeStore);
             completedPomodoros = 0;
         } else {
-            rest(SHORT_BREAK_S);
+            rest($shortBreakTimeStore);
         }
     }
-  
+    
+    // Rest function / break.
     function rest(time){
         currentState = State.resting;
         pomodoroTime = time;
@@ -61,7 +78,7 @@
     function idle(){
         currentState = State.idle;
         clearInterval(interval);
-        pomodoroTime = POMODORO_S;
+        pomodoroTime = $pomoTimeStore;
     }
 
     function cancelPomodoro(){
