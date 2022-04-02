@@ -7,6 +7,9 @@
     let shortBreak
     let longBreak
 
+    // let pomodoroTime = JSON.parse(localStorage.getItem(pomoTimeStore)) ?? 25 * 60;
+
+    
 
     // subscribe to time stores
     pomoTimeStore.subscribe(time => {
