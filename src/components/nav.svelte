@@ -1,5 +1,5 @@
 <script>
-    import SettingPng from "../../static/settings.png";
+    import SettingPng from "../../static/setting.png";
     import Settings from "./Settings.svelte";
 
     let showSettings = false;
@@ -14,7 +14,7 @@
 
     <div class="flex float-right items-center">
         <div class="" on:click={openSettings}>
-            <img class="w-8 h-8" src={SettingPng} alt="settings">
+            <img class="w-6 h-6" src={SettingPng} alt="settings">
         </div>
     </div>
 </div>

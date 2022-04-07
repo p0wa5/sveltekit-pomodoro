@@ -2,12 +2,17 @@
     import { pomoTimeStore} from "../Stores/stores";
     import { shortBreakTimeStore } from "../Stores/stores";
     import { longBreakTimeStore } from "../Stores/stores";
+    import finishAudio from "../Audios/finish.wav";
+
 
     let pomodoroTime
     let shortBreak
     let longBreak
 
-    // let pomodoroTime = JSON.parse(localStorage.getItem(pomoTimeStore)) ?? 25 * 60;
+
+    // Play notification Sound
+    let audio;
+
 
     
 
@@ -48,6 +53,7 @@
         currentState = State.inProgress;
         interval = setInterval(() => {
             if (pomodoroTime === 0) {
+                audio.play();
                 completePomodoro();
             }
             pomodoroTime -= 1;
@@ -87,22 +93,24 @@
     function cancelPomodoro(){
         idle();
     }
+
 </script>
+<audio src={finishAudio} bind:this={audio}></audio>
+<div class="">
+    <div class="shadow-2xl w-64 h-72 md:w-96 h-80 flex rounded-2xl bg-gray-700 items-center mx-auto text-white mt-60">
+        <div class="mx-auto text-center">
+            <p class="text-6xl">{formatTime(pomodoroTime)}</p>
 
+            <p class="mt-6">{completedPomodoros} / 4</p>
 
-<div class="w-64 h-72 md:w-96 h-80 flex rounded-2xl bg-gray-700 items-center mx-auto text-white mt-60">
-    <div class="mx-auto text-center">
-        <p class="text-6xl">{formatTime(pomodoroTime)}</p>
-
-        <p class="mt-6">{completedPomodoros} / 4</p>
-
-        <div class="flex justify-between">
-            <button class="text-xl mt-6 bg-zinc-600 p-3 px-6" on:click={startPomodoro} disabled={currentState !== State.idle}>
-                >
-            </button>
-            <button class="ml-4 text-xl mt-6 bg-zinc-600 p-4 px-6" on:click={cancelPomodoro} disabled={currentState !== State.inProgress}>
-                X
-            </button>
+            <div class="flex justify-between">
+                <button class="text-xl mt-6 bg-zinc-600 p-3 px-6" on:click={startPomodoro} disabled={currentState !== State.idle}>
+                    >
+                </button>
+                <button class="ml-4 text-xl mt-6 bg-zinc-600 p-4 px-6" on:click={cancelPomodoro} disabled={currentState !== State.inProgress}>
+                    X
+                </button>
+            </div>
         </div>
     </div>
 </div>
